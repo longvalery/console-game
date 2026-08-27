@@ -13,6 +13,11 @@ if sys.platform == "win32":
     STD_OUTPUT_HANDLE = -11
     CARRIAGE_RETURN = ""
 
+
+    class CONSOLE_CURSOR_INFO(ctypes.Structure):
+        _fields_ = [("dwSize", ctypes.c_ulong),
+                    ("bVisible", ctypes.c_bool)]
+
     def clear_screen():
         # Очистка экрана в Windows (аналог \033[2J)
         for _ in range(100):
@@ -20,19 +25,18 @@ if sys.platform == "win32":
 
     def hide_cursor():
         # Скрыть курсор в Windows (аналог \033[?25l)
-        kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 0x0001 | 0x0002 | 0x0004)
-        info = ctypes.create_string_buffer(22)
-        kernel32.GetConsoleScreenBufferInfo(kernel32.GetStdHandle(-11), info)
-        mode = ctypes.cast(info, ctypes.POINTER(ctypes.c_uint32)).contents.value
-        ctypes.cast(info, ctypes.POINTER(ctypes.c_uint32)).contents.value = mode & ~0x0020
+        h = kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+        ci = CONSOLE_CURSOR_INFO()
+        kernel32.GetConsoleCursorInfo(h, ctypes.byref(ci))
+        ci.bVisible = False
+        kernel32.SetConsoleCursorInfo(h, ctypes.byref(ci))
 
     def show_cursor():
-        # Показать курсор в Windows (аналог \033[?25h)
-        kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 0x0001 | 0x0002 | 0x0004)
-        info = ctypes.create_string_buffer(22)
-        kernel32.GetConsoleScreenBufferInfo(kernel32.GetStdHandle(-11), info)
-        mode = ctypes.cast(info, ctypes.POINTER(ctypes.c_uint32)).contents.value
-        ctypes.cast(info, ctypes.POINTER(ctypes.c_uint32)).contents.value = mode | 0x0020
+        h = kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+        ci = CONSOLE_CURSOR_INFO()
+        kernel32.GetConsoleCursorInfo(h, ctypes.byref(ci))
+        ci.bVisible = False
+        kernel32.SetConsoleCursorInfo(h, ctypes.byref(ci))
 
 
     def move_cursor_home():
@@ -142,7 +146,7 @@ def game():
             if direction == 'LEFT':
                 car = car - 1 if car > 1 else 1
             if direction == 'RIGHT':
-                car = car + 1 if car < (WIDTH - 1) else WIDTH - 2
+                car = car + 1 if car < (WIDTH - 1) else WIDTH - 1
             if direction == 'UP':
                 pause = pause - 0.1 if pause > 0.1 else 0.1
             if direction == 'DOWN':
