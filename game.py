@@ -148,13 +148,13 @@ def game():
             if direction == 'DOWN':
                 pause = pause + 0.1
 
+        if rows[-1][car] == "#":
+            break
+        rows[-1][car] = "A"
         road = f"{CARRIAGE_RETURN}\n".join("|" + "".join(row) + "|" for row in rows)
         print(road, end="", flush=True)
         print(f"{CARRIAGE_RETURN}\n Счёт: {score}", flush=True)
         rows = move_road(rows)
-        if rows[-1][car] == "#":
-            break
-        rows[-1][car] = "A"
         score += 1
         time.sleep(pause)
 
