@@ -63,14 +63,10 @@ if sys.platform == "win32":
         # Стрелки в Windows: первый байт — спецкод (обычно \xe0 или 0x00), второй — код клавиши
         if ch in ('\xe0', '\0'):
             ch2 = msvcrt.getwch()
-            if ch2 == 'K':
-                return 'LEFT'
-            elif ch2 == 'M':
-                return 'RIGHT'
-            elif ch2 == 'H':
-                return 'UP'
-            elif ch2 == 'P':
-                return 'DOWN'
+            if ch2 == 'K': return 'LEFT'
+            elif ch2 == 'M': return 'RIGHT'
+            elif ch2 == 'H': return 'UP'
+            elif ch2 == 'P': return 'DOWN'
         return None
 else:
     import select
