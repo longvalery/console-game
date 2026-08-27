@@ -163,12 +163,16 @@ def game():
         time.sleep(pause)
 
 if __name__ == "__main__":
-    if sys.platform != "win32":
-        fd = sys.stdin.fileno()
-        old_tty = termios.tcgetattr(fd)
-        tty.setraw(fd)
-    clear_screen()
-    game()
-    show_cursor()
-    if sys.platform != "win32":
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_tty)
+    try:
+        if sys.platform != "win32":
+            fd = sys.stdin.fileno()
+            old_tty = termios.tcgetattr(fd)
+            tty.setraw(fd)
+        clear_screen()
+        game()
+    finally:
+        show_cursor()
+        if sys.platform != "win32":
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_tty)
+
+
