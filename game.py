@@ -35,7 +35,7 @@ if sys.platform == "win32":
         h = kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
         ci = CONSOLE_CURSOR_INFO()
         kernel32.GetConsoleCursorInfo(h, ctypes.byref(ci))
-        ci.bVisible = False
+        ci.bVisible = True
         kernel32.SetConsoleCursorInfo(h, ctypes.byref(ci))
 
 
