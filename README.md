@@ -1,5 +1,5 @@
 Консольная игра на PYTHON 
-идея принадлежит г-ну Бартеньеву 
+идея принадлежит г-ну Бартеневу 
 
 https://habr.com/ru/companies/yandex_praktikum/articles/1068624/
 
